@@ -3,11 +3,11 @@
 > A serverless function thats generates a calendar file to block certain dates for the best holiday appartment in town (https://www.hof-solterbeck.de).
 
 The serverless function is triggered once a day by a cron scheduled `AWS::Events::Rule` (see `template.yaml`).
-- It generates an calendar with three dates
+- It generates a calendar with three dates (see `generate-blocker-ical/app.js`)
   - A blocker for the summer holidays
   - A blocker for the christmas holidays
   - A dynamic blocker that blocks all dates that are not within the next 3 months
-- Pushed the calendar as ical file to a S3 bucket
+- The calendar is then pushed as an ical file to a S3 bucket
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
