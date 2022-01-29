@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  generate blocker ical  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  GenerateBlockerIcal:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: generate-blocker-ical/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - S3FullAccessPolicy:
+            BucketName: hof-solterbeck-ical
+
+  ## Create schedule
+  CronjobsScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Scheduled Rule
+      ScheduleExpression: cron(0 7 ? * * *)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt GenerateBlockerIcal.Arn
+          Id: TargetFunctionV1
+
+  ## Grant permission to Events trigger Lambda
+  PermissionForEventsToInvokeCronjobsFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref GenerateBlockerIcal
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CronjobsScheduledRule.Arn      
+
+Outputs:
+  GenerateBlockerIcal:
+    Description: "Generate Blocker Ical Lambda Function ARN"
+    Value: !GetAtt GenerateBlockerIcal.Arn
+  GenerateBlockerIcalIamRole:
+    Description: "Implicit IAM Role created for Generate Blocker Ical function"
+    Value: !GetAtt GenerateBlockerIcalRole.Arn  

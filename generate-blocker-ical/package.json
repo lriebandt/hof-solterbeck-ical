@@ -1,0 +1,22 @@
+{
+  "name": "generate-blocker-ical",
+  "version": "1.0.0",
+  "description": "Generates a blocker calendar",
+  "main": "app.js",
+  "repository": "https://github.com/lriebandt/hof-solterbeck-ical",
+  "author": "lriebandt",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1048.0",
+    "ical-generator": "^3.1.1",
+    "moment": "^2.29.1"
+  },
+  "scripts": {
+    "test": "mocha tests/unit/"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "sinon": "^12.0.1"
+  }
+}
